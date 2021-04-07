@@ -10,10 +10,36 @@
 		return;
 	
 	// managerLevel 이 낮은 경우, 못 보게 하는 기능	
-	} else if(manager.getManagerLevel() < 2) {
+	} else if(manager.getManagerLevel() < 1) {
 		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
 		return;
 	}
+%>
+<!-- rowPerPage별 페이징을 위한 변수 초기화 -->
+<%
+	// 현재 페이지
+	int currentPage = 1;
+	if(request.getParameter("currentPage") != null) {
+		currentPage = Integer.parseInt(request.getParameter("currentPage")); // 받아온 값 정수로 변환
+	}
+	
+	// 페이지 당 행의 수
+	int rowPerPage = 10;
+	if(request.getParameter("rowPerPage") != null) {
+		rowPerPage = Integer.parseInt(request.getParameter("rowPerPage")); // 받아온 값 정수로 변환
+	}
+	
+	System.out.println(rowPerPage+"<-- managerList의 rowPerPage"); // 디버깅
+	
+	// 시작 행
+	int beginRow = (currentPage - 1) * rowPerPage;
+	
+	// 전체 행의 개수
+	int totalRow = ManagerDao.totalCount();
+	System.out.println(totalRow+"<-- managerList의 totalRow"); // 디버깅
+	
+	// dao 실행해서 list 생성
+	ArrayList<Manager> list = ManagerDao.selectManagerListByPage(rowPerPage, beginRow);
 %>
 <!DOCTYPE html>
 <html>
@@ -48,36 +74,14 @@
 	                    <i class="bi bi-justify fs-3"></i>
 	                </a>
 	    </header>
-	<h1>managerList</h1>
 	
+	<h1><a href="<%=request.getContextPath()%>/manager/managerList.jsp">ManagerList</a></h1>
+	<!-- manager 추가 버튼 -->
+	<a href="<%=request.getContextPath()%>/manager/insertManagerForm.jsp"><button type="button" class="btn btn-outline-primary">Add a New Manager</button></a>
 	
-	<!-- rowPerPage별 페이징을 위한 변수 초기화 -->
-	<%
-		// 현재 페이지
-		int currentPage = 1;
-		if(request.getParameter("currentPage") != null) {
-			currentPage = Integer.parseInt(request.getParameter("currentPage")); // 받아온 값 정수로 변환
-		}
-		
-		// 페이지 당 행의 수
-		int rowPerPage = 10;
-		if(request.getParameter("rowPerPage") != null) {
-			rowPerPage = Integer.parseInt(request.getParameter("rowPerPage")); // 받아온 값 정수로 변환
-		}
-		
-		// 시작 행
-		int beginRow = (currentPage - 1) * rowPerPage;
-		
-		// 전체 행의 개수
-		int totalRow = OrdersDao.totalCount();
-		System.out.println(totalRow+"<-- managerList의 totalRow"); // 디버깅
-		
-		// dao 실행해서 list 생성
-		ArrayList<Manager> list = ManagerDao.selectManagerListByPage(rowPerPage, beginRow);
-	%>
-	
-	<!-- 한 페이지당 몇개씩 볼건지 선택가능 -->
+	<!-- 한 페이지당 몇 개씩 볼건지 선택 가능 (~개씩 보기) -->
 	<form action="<%=request.getContextPath()%>/manager/managerList.jsp" method="post">
+		<br>
 		<select name="rowPerPage">
 			<%
 				for(int i=10; i<31; i+=5) {
@@ -93,8 +97,10 @@
 				}
 			%>
 		</select>
-		<button type="submit">보기</button>
+		<button type="submit" class="btn btn-sm btn btn-primary">보기</button>
 	</form>
+	
+	<br>
 	
 	<!-- managerList 테이블 작성 -->
 	<div class="page-content">
@@ -107,7 +113,7 @@
 								<thead>
 									<tr>
 										<th>ManagerNo</th>
-										<th>ManagerId</th>
+										<th>ManagerID</th>
 										<th>ManagerName</th>
 										<th>ManagerDate</th>
 										<th>ManagerLevel</th>
@@ -138,16 +144,16 @@
 															<%			
 																	} else {
 															%>
-																		<option value="<%=i%>"><%=i%>=</option>
+																		<option value="<%=i%>"><%=i%></option>
 															<%			
 																	}		
 																}
 															%>
 														</select>
-														<button type="submit">수정</button>
+														<button type="submit" class="btn btn-sm btn btn-primary">수정</button>
 													</form>
 												</td>
-												<td><a href="<%=request.getContextPath()%>/manager/deleteManagerAction.jsp?managerNo=<%=m.getManagerNo()%>"><button type="button">삭제</button></a></td>
+												<td><a href="<%=request.getContextPath()%>/manager/deleteManagerAction.jsp?managerNo=<%=m.getManagerNo()%>"><button type="button" class="btn btn-sm btn btn-primary">삭제</button></a></td>
 											</tr>
 									<%
 										}
@@ -161,27 +167,60 @@
 		</section>
 	</div>
 	
-	<!-- 페이징 (이전, 다음) 버튼 만들기 -->
-	<% 
-		// 맨 첫 페이지에서 이전 버튼이 나오지 않게 함
-		if(currentPage > 1) {
-	%>
-			<a href="<%=request.getContextPath()%>/manager/managerList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>">이전</a>
-	<%
-		}
 	
-		// 맨 마지막 페이지에서 다음 버튼이 보이지 않도록 함
-		int lastPage = totalRow / rowPerPage;
-		if(totalRow % rowPerPage != 0) {
-			lastPage += 1; // lastPage = lastPage+1; lastPage++;
-		}
+	<!-- 페이징 (이전, 다음) 버튼 만들기 + 페이징 숫자 나오게 하기 -->
+	<nav aria-label="Page navigation example">
+		<ul class="pagination pagination-primary justify-content-center">
+		<% 
+			// 이전 버튼
+			// 맨 첫 페이지에서 이전 버튼이 나오지 않게 함
+			if(currentPage > 1) { // 첫 페이지가 아니라면
+		%>
+				<li class="page-item">
+					<a class="page-link" href="<%=request.getContextPath()%>/manager/managerList.jsp?currentPage=<%=currentPage-1%>&rowPerPage=<%=rowPerPage%>">
+		            	<span aria-hidden="true"><i class="bi bi-chevron-left"></i></span>
+					</a>
+				</li>
+		<%
+			}
+		%>
 		
-		if(currentPage < lastPage) {
-	%>
-			<a href="<%=request.getContextPath()%>/manager/managerList.jsp?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>">다음</a>
-	<%
-		}
-	%>
+		<%
+			// 페이징 번호 나오게 하기 위한 메소드 (1, 2, 3, ...)	
+			int lastPage = totalRow / rowPerPage;
+			
+		 	int pageRange = (currentPage - 1)/10;
+			for (int i = 1; i <= 10; i++) {
+				if((pageRange * 10) + i == (lastPage + 1)) {
+					break;
+				}
+		%>
+				<li class="page-item"><a class="page-link" href="<%=request.getContextPath()%>/manager/managerList.jsp?currentPage=<%=(pageRange*10)+i%>&rowPerPage=<%=rowPerPage%>"><%=(pageRange*10)+i%></a></li>
+		<%
+			} 
+		%>
+		
+		<%
+			// 다음 버튼
+			// 맨 마지막 페이지에서 다음 버튼이 보이지 않도록 함
+			if(totalRow % rowPerPage != 0) {
+				lastPage += 1;
+			}
+			
+			if(currentPage < lastPage) {
+		%>
+				<li class="page-item">
+					<a class="page-link" href="<%=request.getContextPath()%>/manager/managerList.jsp?currentPage=<%=currentPage+1%>&rowPerPage=<%=rowPerPage%>">
+						<span aria-hidden="true"><i class="bi bi-chevron-right"></i></span>
+					</a>
+				</li>
+		<%
+			}
+		%>
+		</ul>
+	</nav>
+	<!-- 페이징 끝 -->	
+		
 		<!-- 저작권 표시 -->
 		<footer>
 		       <div class="footer clearfix mb-0 text-muted">

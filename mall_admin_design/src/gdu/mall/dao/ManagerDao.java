@@ -16,7 +16,7 @@ public class ManagerDao {
 		// 3. DB 처리
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement stmt =  conn.prepareStatement(sql);
-		System.out.println(stmt+ "<--stmt"); // 디버깅
+		System.out.println(stmt+ "<-- selectManagerListByZero의 stmt"); // 디버깅
 		ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Manager m = new Manager();
@@ -41,7 +41,7 @@ public class ManagerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, managerLevel); // 입력한 level값을 받음
 		stmt.setInt(2, managerNo); // managerNo 값을 통해서 수정할 행 구분
-		System.out.println(stmt+ "<--stmt"); // 디버깅
+		System.out.println(stmt+ "<-- updateManagerLevel의 stmt"); // 디버깅
 		rowCnt = stmt.executeUpdate();
 		
 		return rowCnt;
@@ -59,7 +59,7 @@ public class ManagerDao {
 		Connection conn = DBUtil.getConnection();
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, managerNo); // primary key인 managerNo로 행을 구분해서 삭제함
-		System.out.println(stmt+ "<--stmt"); // 디버깅
+		System.out.println(stmt+ "<-- deleteManager의 stmt"); // 디버깅
 		rowCnt = stmt.executeUpdate();
 		
 		return rowCnt;
@@ -78,7 +78,7 @@ public class ManagerDao {
 		PreparedStatement stmt =  conn.prepareStatement(sql);
 		stmt.setInt(1, beginRow);
 		stmt.setInt(2, rowPerPage);
-		System.out.println(stmt+ "<--stmt"); // 디버깅
+		System.out.println(stmt+ "<-- selectManagerListByPage의 stmt"); // 디버깅
 		ResultSet rs = stmt.executeQuery();
 			while (rs.next()) {
 				Manager m = new Manager();
@@ -105,11 +105,12 @@ public class ManagerDao {
 		stmt.setString(1, managerId);
 		stmt.setString(2, managerPw);
 		stmt.setString(3, managerName);
-		System.out.println(stmt+ "<--stmt"); // 디버깅
+		System.out.println(stmt+ "<-- insertManager의 stmt"); // 디버깅
 		rowCnt = stmt.executeUpdate();
 		
 		return rowCnt;
 	}
+	
 	// id 사용가능여부
 	public static String selectManagerId(String managerId) throws Exception {
 		// 1. sql문
@@ -123,6 +124,7 @@ public class ManagerDao {
 		
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, managerId);
+		System.out.println(stmt+ "<-- selectManagerId의 stmt"); // 디버깅
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			returnManagerId = rs.getString("manager_id");
@@ -142,7 +144,7 @@ public class ManagerDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setString(1, managerId);
 		stmt.setString(2, managerPw);
-		System.out.println(stmt + " <--login() sql");
+		System.out.println(stmt + " <--ManagerDao login의 stmt");
 		ResultSet rs = stmt.executeQuery();
 		if(rs.next()) {
 			manager = new Manager();

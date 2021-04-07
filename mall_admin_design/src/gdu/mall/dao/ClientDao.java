@@ -41,7 +41,7 @@ public class ClientDao {
 		stmt.executeUpdate();
 	}
 
-	// 전체 행의 수 세기
+	// 전체 행의 수 세기 + 검색어 출력
 	public static int totalCount(String searchWord) throws Exception {
 		
 		int totalRow = 0;

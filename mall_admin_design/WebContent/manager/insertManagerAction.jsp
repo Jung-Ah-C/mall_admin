@@ -2,15 +2,6 @@
 <%@ page import="gdu.mall.dao.*" %>
 <%@ page import="gdu.mall.vo.*" %>
 <%
-	// 매니저인 사람들만 고객리스트에 접근할 수 있게 함
-	// 매니저가 아니라면 다시 adminIndex로 보내버림
-	Manager manager = (Manager)session.getAttribute("sessionManager");
-	if(manager == null || manager.getManagerLevel() < 1) {
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
-		return; // 코드 실행 멈춤
-	}
-%>
-<%
 	// 1. 수집 (managerInsertForm에서 입력한 정보를 가져옴)
 	request.setCharacterEncoding("UTF-8");
 	String managerId = request.getParameter("managerId");
@@ -36,9 +27,38 @@
 	ManagerDao.insertManager(managerId, managerPw, managerName);
 	// 3. 등록에 성공한다면 간단한 메세지를 출력
 %>
-	<div>
-		매니저 등록 성공! 승인 후 사용 가능합니다.
-		<a href="<%=request.getContextPath()%>/adminIndex.jsp">관리자 홈</a>
+<!DOCTYPE html>
+<html>
+<head>
+<title>insertManagerForm</title>
+<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/app.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/pages/auth.css">
+</head>
+<body>
+	<div class="text-center">
+		<img src="<%=request.getContextPath()%>/img/firecracker.png">
+		<div>
+			<h1>Welcome!</h1>
+			<p>매니저 등록 성공! 승인 후 사용 가능합니다.</p>
+				
+				<table class="table" style="width: 600px; margin-left:auto; margin-right:auto;">
+					<tr>
+						<th>Manager ID</th>
+						<td><%=managerId%></td>
+					</tr>
+					<tr>
+						<th>Manager Name</th>
+						<td><%=managerName%></td>
+					</tr>
+				</table>
+		</div>
+		<a href="<%=request.getContextPath()%>/adminIndex.jsp"><button class="btn btn-primary">Home</button></a>	
 	</div>
+		
 </body>
 </html>
