@@ -2,6 +2,24 @@
 <%@ page import ="gdu.mall.vo.*" %>
 <%@ page import ="gdu.mall.dao.*" %>
 <%@ page import ="java.util.*" %>
+<%
+	// 세션이 null이 아닌 경우, 로그인을 함 --> ~님 반갑습니다 멘트, 레벨 정보 + 관리자화면 메뉴 + 로그아웃 링크
+
+	Manager manager = (Manager)(session.getAttribute("sessionManager")); // Manager 클래스 타입의 manager라는 변수에 session 결과를 담음?
+
+	// Dao 호출
+	ArrayList<Notice> noticeList = NoticeDao.selectNoticeListByPage(5, 0);
+	ArrayList<Manager> managerList = ManagerDao.selectManagerListByPage(5, 0);
+	ArrayList<Client> clientList = ClientDao.selectClientListByPage(5, 0, "");
+	ArrayList<Ebook> ebookList = EbookDao.selectEbookListByPage(5, 0, null);
+	ArrayList<OrdersAndEbookAndClient> oecList = OrdersDao.selectOrdersListByPage(5, 0);
+	
+	// 변수 초기화
+	int OrdersTotalRow = OrdersDao.totalCount();
+	int ManagerTotalRow = ManagerDao.totalCount();
+	int EbookTotalRow = EbookDao.totalCount();
+	
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -46,18 +64,7 @@
 			1) 관리자 로그인 폼
 			2) 관리자 인증 화면 & 몰 메인페이지
 		-->
-	<%
-		// 세션이 null이 아닌 경우, 로그인을 함 --> ~님 반갑습니다 멘트, 레벨 정보 + 관리자화면 메뉴 + 로그아웃 링크
 	
-		Manager manager = (Manager)(session.getAttribute("sessionManager")); // Manager 클래스 타입의 manager라는 변수에 session 결과를 담음?
-	
-		// Dao 호출
-		ArrayList<Notice> noticeList = NoticeDao.selectNoticeListByPage(5, 0);
-		ArrayList<Manager> managerList = ManagerDao.selectManagerListByPage(5, 0);
-		ArrayList<Client> clientList = ClientDao.selectClientListByPage(5, 0, "");
-		ArrayList<Ebook> ebookList = EbookDao.selectEbookListByPage(5, 0, null);
-		ArrayList<OrdersAndEbookAndClient> oecList = OrdersDao.selectOrdersListByPage(5, 0);
-	%>
 	    <!-- 페이지 작게 했을 때 뜨는 사이드바 열고 닫는 버튼 -->
 	        <div id="main">
 	            <header class="mb-3">
@@ -65,22 +72,77 @@
 	                    <i class="bi bi-justify fs-3"></i>
 	                </a>
 	            </header>
-				<!-- 로그인 한 관리자 정보 표시 -->
-	            <div class="page-heading col-12 col-lg-3">
-					<div class="card">
-					    <div class="card-body py-4 px-5">
-					        <div class="d-flex align-items-center">
-					            <div class="avatar avatar-xl">
-					                <img src="assets/images/faces/1.jpg" alt="Face 1">
-					            </div>
-					            <div class="ms-3 name">
-					                <h5 class="font-bold"><%=manager.getManagerName()%></h5>
-					                <h6 class="text-muted mb-0">Level : <%=manager.getManagerLevel()%></h6>
-					            </div>
-					        </div>
-					    </div>
+				<section class="row">	
+					<div class="row">
+						<!-- 로그인 한 관리자 정보 표시 -->
+			            <div class="page-heading col-12 col-lg-3">
+							<div class="card">
+							    <div class="card-body py-4 px-5">
+							        <div class="d-flex align-items-center">
+							            <div class="avatar avatar-xl">
+							                <img src="assets/images/faces/1.jpg" alt="Face 1">
+							            </div>
+							            <div class="ms-3 name">
+							                <h5 class="font-bold">Hello, <%=manager.getManagerName()%></h5>
+							                <h6 class="text-muted mb-0">Level : <%=manager.getManagerLevel()%></h6>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+						
+						<!-- Total Orders 정보 표시 -->
+						<div class="page-heading col-12 col-lg-3">
+							<div class="card">
+							    <div class="card-body px-3 py-4-5">
+                                	 <div class="d-flex align-items-center text-center">
+							            <div class="stats-icon purple">
+							                <i class="iconly-boldShow"></i>
+							            </div>
+							            <div class="col-md-8">
+							                <h5 class="text-muted font-semibold">Total Orders</h5>
+                                            <h5 class="font-extrabold mb-0"><%=OrdersTotalRow%></h5>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+						
+						<!-- Total E-book 정보 표시 -->
+						<div class="page-heading col-12 col-lg-3">
+							<div class="card">
+							    <div class="card-body px-3 py-4-5">
+                                	<div class="d-flex align-items-center text-center">
+							            <div class="stats-icon red">
+							                <i class="iconly-boldBookmark"></i>
+							            </div>
+							            <div class="col-md-8">
+							                <h5 class="text-muted font-semibold">Total E-book</h5>
+                                            <h5 class="font-extrabold mb-0"><%=EbookTotalRow%></h5>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</div>
+						
+						<!-- Total Managers 정보 표시 -->
+						<div class="page-heading col-12 col-lg-3">
+							<div class="card">
+							    <div class="card-body px-3 py-4-5">
+                                	<div class="d-flex align-items-center text-center">
+							            <div class="stats-icon blue">
+							                <i class="iconly-boldProfile"></i>
+							            </div>
+							            <div class="col-md-8">
+							                <h5 class="text-muted font-semibold">Total Managers</h5>
+                                            <h5 class="font-extrabold mb-0"><%=ManagerTotalRow%></h5>
+							            </div>
+							        </div>
+							    </div>
+							</div>
+						</div>
 					</div>
-				</div>
+				</section>
 				
 				<!-- 최근 자료 대시보드 -->
 				<h3>Dashboard</h3>
