@@ -3,7 +3,7 @@
 <%@ page import="gdu.mall.vo.*" %>
 <%@ page import="java.util.*" %>
 <%
-	// 매니저인 사람들만 고객리스트에 접근할 수 있게 함
+	// 매니저 레벨 1 이상만 카테고리 목록에 접근할 수 있게 함
 	// 매니저가 아니라면 다시 adminIndex로 보내버림
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
@@ -20,14 +20,14 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/bootstrap.css">
 
-    <link rel="stylesheet" href="assets/vendors/iconly/bold.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/iconly/bold.css">
 
-    <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/app.css">
+    <link rel="shortcut icon" href="<%=request.getContextPath()%>/assets/images/favicon.svg" type="image/x-icon">
 <title>categoryList</title>
 </head>
 <body>
@@ -45,53 +45,99 @@
 	
 	<!-- 페이징 X, 검색어 X -->
 	<!-- 카테고리 목록 테이블 -->
-	<h1>카테고리 목록</h1>
-	<a href="<%=request.getContextPath()%>/category/insertCategoryForm.jsp"><button type="button">카테고리 추가</button></a>
-	<table border="1">
-		<thead>
-			<tr>
-				<th>categoryName</th>
-				<th>categoryWeight</th> <!-- managerlevel 수정한 것처럼 weight도 수정할 수 있게 함 -->
-				<th>삭제</th>
-			</tr>
-		</thead>
-		<tbody>
-			<%
-				for(Category c : list) {
-			%>
-					<tr>
-						<td><%=c.getCategoryName()%></td>
-						<td>
-							<form action="<%=request.getContextPath()%>/category/updateCategoryWeightAction.jsp" method="post">
-								<!-- categoryWeight를 수정할 때, 어떤 행을 수정할지 구분짓기 위해서 categoryNo도 같이 Action으로 넘김 (안보이게 하기 위해서 hidden 기능 사용!) -->
-								<input type="hidden" name="categoryNo" value=<%=c.getCategoryNo()%>>
-								<select name="categoryWeight">
+<div id="app">
+	<div id="main">
+		
+		<header class="mb-3">
+	        <a href="#" class="burger-btn d-block d-xl-none">
+	            <i class="bi bi-justify fs-3"></i>
+	        </a>
+	    </header>
+	
+	<h1><a href="<%=request.getContextPath()%>/category/categoryList.jsp">CategoryList</a></h1>
+	<!-- category 추가 버튼 -->
+	<a href="<%=request.getContextPath()%>/category/insertCategoryForm.jsp"><button type="button" class="btn btn-outline-primary">Add New Category</button></a>
+	
+	<!-- Category 테이블 -->
+	<div class="page-content">
+		<br>
+		<section class="row">
+			<div class="row">
+				<div class="col-12">
+					<div class="card">
+						<div class="table-responsive">
+							<table class="table table-lg">
+								<thead>
+									<tr>
+										<th>CategoryName</th>
+										<th>CategoryWeight</th> <!-- managerlevel 수정한 것처럼 weight도 수정할 수 있게 함 -->
+										<th>Delete</th>
+									</tr>
+								</thead>
+								<tbody>
 									<%
-										for(int i=0; i<11; i++) {
-											if(c.getCategoryWeight() == i) {
+										for(Category c : list) {
 									%>
-												<!-- 가중치 변경시에 선택된 가중치 값으로 나오게 함 -->
-												<option value="<%=i%>" selected="selected"><%=i%></option>
-									<%			
-											} else {
-									%>
-												<!-- 기본 가중치는 0으로 함 -->
-												<option value="<%=i%>"><%=i%></option>
-									<%			
-											}		
+											<tr>
+												<td><%=c.getCategoryName()%></td>
+												<td>
+													<form action="<%=request.getContextPath()%>/category/updateCategoryWeightAction.jsp" method="post">
+														<!-- categoryWeight를 수정할 때, 어떤 행을 수정할지 구분짓기 위해서 categoryNo도 같이 Action으로 넘김 (안보이게 하기 위해서 hidden 기능 사용!) -->
+														<input type="hidden" name="categoryNo" value=<%=c.getCategoryNo()%>>
+														<select name="categoryWeight">
+															<%
+																for(int i=0; i<11; i++) {
+																	if(c.getCategoryWeight() == i) {
+															%>
+																		<!-- 가중치 변경시에 선택된 가중치 값으로 나오게 함 -->
+																		<option value="<%=i%>" selected="selected"><%=i%></option>
+															<%			
+																	} else {
+															%>
+																		<!-- 기본 가중치는 0으로 함 -->
+																		<option value="<%=i%>"><%=i%></option>
+															<%			
+																	}		
+																}
+															%>
+														</select>
+														<button type="submit" class="btn btn-sm btn btn-primary">Edit</button>
+													</form>
+												</td>
+												<!-- 삭제할 때 기준이 되는 키는 categoryName 으로 함, categoryNo는 계속 변하니까 -->
+												<td><a href="<%=request.getContextPath()%>/category/deleteCategoryAction.jsp?categoryName=<%=c.getCategoryName()%>"><button type=button class="btn btn-sm btn btn-primary">Delete</button></a></td>
+											</tr>
+									<%
 										}
 									%>
-								</select>
-								<button type="submit">수정</button>
-							</form>
-						</td>
-						<!-- 삭제할 때 기준이 되는 키는 categoryName 으로 함, categoryNo는 계속 변하니까 -->
-						<td><a href="<%=request.getContextPath()%>/category/deleteCategoryAction.jsp?categoryName=<%=c.getCategoryName()%>"><button type=button>삭제</button></a></td>
-					</tr>
-			<%
-				}
-			%>
-		</tbody>
-	</table>
+								</tbody>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	</div>
+	<!-- 저작권 표시 -->
+		<footer>
+		       <div class="footer clearfix mb-0 text-muted">
+		           <div class="float-start">
+		               <p>2021 &copy; RiDi</p>
+		           </div>
+		           <div class="float-end">
+		               <p>Made with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+		                       href="https://github.com/Jung-Ah-C">Jungah Choi</a></p>
+		           </div>
+		       </div>
+		</footer>
+	</div>
+</div>
+<script src="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/vendors/apexcharts/apexcharts.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/pages/dashboard.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 </body>
 </html>

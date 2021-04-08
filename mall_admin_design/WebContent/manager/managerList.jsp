@@ -70,9 +70,9 @@
 <div id="app">
 	<div id="main">
 		<header class="mb-3">
-	                <a href="#" class="burger-btn d-block d-xl-none">
-	                    <i class="bi bi-justify fs-3"></i>
-	                </a>
+	        <a href="#" class="burger-btn d-block d-xl-none">
+	            <i class="bi bi-justify fs-3"></i>
+	        </a>
 	    </header>
 	
 	<h1><a href="<%=request.getContextPath()%>/manager/managerList.jsp">ManagerList</a></h1>
@@ -87,17 +87,17 @@
 				for(int i=10; i<31; i+=5) {
 					if(rowPerPage == i) {
 			%>
-					<option value=<%=i%> selected="selected"><%=i%>개씩</option> 
+					<option value=<%=i%> selected="selected"><%=i%></option> 
 			<%
 					} else {
 			%>
-					<option value=<%=i%>><%=i%>개씩</option>
+					<option value=<%=i%>><%=i%></option>
 			<%	
 					}
 				}
 			%>
 		</select>
-		<button type="submit" class="btn btn-sm btn btn-primary">보기</button>
+		<button type="submit" class="btn btn-sm btn btn-primary">entries per page</button>
 	</form>
 	
 	<br>
@@ -117,7 +117,7 @@
 										<th>ManagerName</th>
 										<th>ManagerDate</th>
 										<th>ManagerLevel</th>
-										<th>삭제</th>
+										<th>Delete</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -150,10 +150,10 @@
 																}
 															%>
 														</select>
-														<button type="submit" class="btn btn-sm btn btn-primary">수정</button>
+														<button type="submit" class="btn btn-sm btn btn-primary">Edit</button>
 													</form>
 												</td>
-												<td><a href="<%=request.getContextPath()%>/manager/deleteManagerAction.jsp?managerNo=<%=m.getManagerNo()%>"><button type="button" class="btn btn-sm btn btn-primary">삭제</button></a></td>
+												<td><a href="<%=request.getContextPath()%>/manager/deleteManagerAction.jsp?managerNo=<%=m.getManagerNo()%>"><button type="button" class="btn btn-sm btn btn-primary">Delete</button></a></td>
 											</tr>
 									<%
 										}

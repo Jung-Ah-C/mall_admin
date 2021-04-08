@@ -24,7 +24,7 @@ public class OrdersDao {
 	 */
 	public static ArrayList<OrdersAndEbookAndClient> selectOrdersListByPage(int rowPerPage, int beginRow) throws Exception {
 		// 쿼리 작성
-		String sql = "SELECT o.orders_no ordersNo, o.ebook_no ebookNo, e.ebook_title ebookTitle, o.client_no clientNo, c.client_mail clientMail, o.orders_date ordersDate, o.orders_state ordersState FROM orders o INNER JOIN ebook e INNER JOIN client c ON o.ebook_no = e.ebook_no AND o.client_no = c.client_no ORDER BY o.orders_no desc limit ?,?;";
+		String sql = "SELECT o.orders_no ordersNo, o.ebook_no ebookNo, e.ebook_title ebookTitle, o.client_no clientNo, c.client_mail clientMail, o.orders_date ordersDate, o.orders_state ordersState FROM orders o INNER JOIN ebook e INNER JOIN client c ON o.ebook_no = e.ebook_no AND o.client_no = c.client_no ORDER BY o.orders_no desc limit ?,?";
 		
 		// 배열 초기화
 		ArrayList<OrdersAndEbookAndClient> list = new ArrayList<>();
@@ -34,7 +34,7 @@ public class OrdersDao {
 		PreparedStatement stmt = conn.prepareStatement(sql);
 		stmt.setInt(1, beginRow);
 		stmt.setInt(2, rowPerPage);
-		System.out.println(stmt + "<-- OrdersDao ordersList의 stmt"); // 디버깅
+		System.out.println(stmt + "<-- OrdersDao selectOrdersListByPage의 stmt"); // 디버깅
 		
 		// 결과값 추출
 		ResultSet rs = stmt.executeQuery();

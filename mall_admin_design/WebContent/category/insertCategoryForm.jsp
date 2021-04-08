@@ -3,7 +3,7 @@
 <%@ page import="gdu.mall.vo.*" %>
 <%@ page import="java.util.*" %>
 <%
-	// 매니저인 사람들만 고객리스트에 접근할 수 있게 함
+	// 매니저 레벨 1 이상만 카테고리 수정할 수 있게 함
 	// 매니저가 아니라면 다시 adminIndex로 보내버림
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {
@@ -19,14 +19,14 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/bootstrap.css">
 
-    <link rel="stylesheet" href="assets/vendors/iconly/bold.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/iconly/bold.css">
 
-    <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/app.css">
+    <link rel="shortcut icon" href="<%=request.getContextPath()%>/assets/images/favicon.svg" type="image/x-icon">
 <title>insertCategoryForm</title>
 </head>
 <body>
@@ -37,18 +37,69 @@
 			<jsp:param name="current" value="category"/>
 		</jsp:include>
 	</div>
+
+<div id="app">
+	<div id="main">
 	
-	<h1>카테고리 등록</h1>
-	<form action="<%=request.getContextPath()%>/category/insertCategoryAction.jsp">
-		<table border="1">
-				<tr>
-					<th>category_name</th>
-					<td>
-						<input type="text" name="categoryName">
-					</td>
-				</tr>
-		</table>
-		<button type="submit">추가하기</button>
-	</form>
+	<header class="mb-3">
+	    <a href="#" class="burger-btn d-block d-xl-none">
+	        <i class="bi bi-justify fs-3"></i>
+	    </a>
+    </header>
+	
+	<!-- 제목 클릭 시 CategoryList로 돌아감 -->
+	<h1><a href="<%=request.getContextPath()%>/category/categoryList.jsp">CategoryList</a></h1>
+	
+	<div class="row match-height">
+		<div class="col-md-6 col-12">
+			<div class="card">
+				<div class="card-header">
+                    <h4 class="card-title">CategoryForm</h4>
+                    <p class="card-text">Add New Category</p>
+                </div>
+				<div class="card-content">
+					<div class="card-body">
+						<form action="<%=request.getContextPath()%>/category/insertCategoryAction.jsp" method="post" class="form form-vertical">
+							<div class="form-body">
+								<div class="row">
+									<div class="col-md-4">
+										<label for="categoryName">Category Name</label>
+									</div>
+									<div class="col-md-8 form-group">
+										<input type="text" name="categoryName" class="form-control" required="required">
+									</div>
+									<div class="col-sm-12 d-flex justify-content-end">
+										<button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>
+										<button type="reset" class="btn btn-light-secondary me-1 mb-1">Reset</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+		<!-- 저작권 표시 -->
+		<footer>
+		       <div class="footer clearfix mb-0 text-muted">
+		           <div class="float-start">
+		               <p>2021 &copy; RiDi</p>
+		           </div>
+		           <div class="float-end">
+		               <p>Made with <span class="text-danger"><i class="bi bi-heart"></i></span> by <a
+		                       href="https://github.com/Jung-Ah-C">Jungah Choi</a></p>
+		           </div>
+		       </div>
+		</footer>
+	</div>
+</div>
+<script src="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/vendors/apexcharts/apexcharts.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/pages/dashboard.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 </body>
 </html>

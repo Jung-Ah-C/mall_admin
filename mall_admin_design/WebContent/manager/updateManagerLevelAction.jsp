@@ -1,16 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="gdu.mall.vo.*"%>
 <%@ page import="gdu.mall.dao.*" %>
-<%	
-	//주소창에 직접 치고 들어왔을 때, 못 들어오게 하는 기능 (로그인 기록이 없는 경우)
+<%
+	// 매니저가 아니라면 다시 adminIndex로 보내버림
+	// 레벨 2 이상만 레벨 수정 가능
 	Manager manager = (Manager)session.getAttribute("sessionManager");
-	if (manager == null) {
+	if(manager == null || manager.getManagerLevel() < 2) {
 		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
-		return;	
-	} else if(manager.getManagerLevel() < 2) { // managerLevel 이 낮은 경우, 못 보게 하는 기능
-		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
-		return;
+		return; // 코드 실행 멈춤
 	}
+%>
+<%
 
 	// 수집 코드 구현 (managerNo, managerLevel)
 	// 값을 받아올 때 String으로 받기 때문에 int로 변환해줘야 함

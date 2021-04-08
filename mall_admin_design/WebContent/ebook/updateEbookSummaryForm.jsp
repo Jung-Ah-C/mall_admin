@@ -11,6 +11,14 @@
 		return; // 코드 실행 멈춤
 	}
 %>
+<%
+	// 수집
+	String ebookISBN = request.getParameter("ebookISBN");
+	System.out.printf(ebookISBN+"<-- updateEbookSummaryForm의 ebookISBN");
+	
+	// dao연결
+	Ebook ebook = EbookDao.selectEbookOne(ebookISBN);
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,14 +27,14 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@300;400;600;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/bootstrap.css">
 
-    <link rel="stylesheet" href="assets/vendors/iconly/bold.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/iconly/bold.css">
 
-    <link rel="stylesheet" href="assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
-    <link rel="stylesheet" href="assets/vendors/bootstrap-icons/bootstrap-icons.css">
-    <link rel="stylesheet" href="assets/css/app.css">
-    <link rel="shortcut icon" href="assets/images/favicon.svg" type="image/x-icon">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="<%=request.getContextPath()%>/assets/css/app.css">
+    <link rel="shortcut icon" href="<%=request.getContextPath()%>/assets/images/favicon.svg" type="image/x-icon">
 <title>updateEbookSummaryForm</title>
 </head>
 <body>
@@ -51,27 +59,61 @@
 			}
 		%>
 	</div>
+<div id="app">
+	<div id="main">
 	
-	<%
-		// 수집
-		String ebookISBN = request.getParameter("ebookISBN");
-		System.out.printf(ebookISBN+"<-- updateEbookSummaryForm의 ebookISBN");
-		
-		// dao연결
-		Ebook ebook = EbookDao.selectEbookOne(ebookISBN);
-	%>
-	<h1>updateEbookSummaryForm</h1>
-	<form action="<%=request.getContextPath()%>/ebook/updateEbookSummaryAction.jsp">
-		<input type="hidden" name="ebookISBN" value="<%=ebookISBN%>">
-		<table border="1">
-			<tr>
-				<td>ebookSummary</td>
-				<td>
-					<textarea rows="5" cols="80" name="ebookSummary"><%=ebook.getEbookSummary()%></textarea>
-				</td>
-			</tr>
-		</table>
-		<button type="submit">수정</button>
-	</form>
+	<header class="mb-3">
+	    <a href="#" class="burger-btn d-block d-xl-none">
+	        <i class="bi bi-justify fs-3"></i>
+	    </a>
+    </header>
+	
+	<!-- 클릭하면 E-bookList로 넘어감 -->
+	<h1><a href="<%=request.getContextPath()%>/ebook/ebookList.jsp">E-bookList</a></h1>
+	<div class="col-12 col-md-6">
+	    <div class="card">
+		    <div class="card-header">
+		    <h4 class="card-title">Edit E-book Summary</h4>
+		    </div>
+		    <div class="card-content">
+			   	<div class="card-body">
+					<form action="<%=request.getContextPath()%>/ebook/updateEbookSummaryAction.jsp">
+						<input type="hidden" name="ebookISBN" value="<%=ebookISBN%>">
+						<div class="col-md-4">
+							<label for="ebookSummary">ebookSummary</label>
+						</div>
+						<div class="col-md-8 form-group">
+							<textarea rows="5" name="ebookSummary" class="col-md-8 form-control" required="required"><%=ebook.getEbookSummary()%></textarea>
+						</div>
+						<button type="submit" class="btn btn-primary">Edit</button>
+						<button type="reset" class="btn btn-light-secondary">Reset</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	<!-- 저작권 표시 -->
+	<footer>
+		<div class="footer clearfix mb-0 text-muted">
+		    <div class="float-start">
+		        <p>2021 &copy; RiDi</p>
+		    </div>
+		    <div class="float-end">
+		        <p>Made with <span class="text-danger"><i class="bi bi-heart"></i></span> by 
+		        <a href="https://github.com/Jung-Ah-C">Jungah Choi</a></p>
+		    </div>
+		</div>
+	</footer>
+	</div>
+</div>
+
+<script src="<%=request.getContextPath()%>/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/bootstrap.bundle.min.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/vendors/apexcharts/apexcharts.js"></script>
+<script src="<%=request.getContextPath()%>/assets/js/pages/dashboard.js"></script>
+
+<script src="<%=request.getContextPath()%>/assets/js/main.js"></script>
 </body>
 </html>

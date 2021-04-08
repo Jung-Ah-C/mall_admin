@@ -69,7 +69,11 @@
 	</div>
 <div id="app">
 	<div id="main">
-	
+	<header class="mb-3">
+    <a href="#" class="burger-btn d-block d-xl-none">
+        <i class="bi bi-justify fs-3"></i>
+    </a>
+	</header>
 	<h1><a href="<%=request.getContextPath()%>/client/clientList.jsp">ClientList</a></h1>
 	
 	<!-- 한 페이지당 몇 개씩 볼건지 선택가능 -->
@@ -81,17 +85,17 @@
 				for(int i=10; i<31; i+=5) {
 					if(rowPerPage == i) {
 			%>
-					<option value=<%=i%> selected="selected"><%=i%>개씩</option> 
+					<option value=<%=i%> selected="selected"><%=i%></option> 
 			<%
 					} else {
 			%>
-					<option value=<%=i%>><%=i%>개씩</option>
+					<option value=<%=i%>><%=i%></option>
 			<%	
 					}
 				}
 			%>
 		</select>
-		<button type="submit" class="btn btn-sm btn btn-primary">보기</button>
+		<button type="submit" class="btn btn-sm btn btn-primary">entries per page</button>
 	</form>
 	
 	<br>
@@ -108,8 +112,8 @@
 									<tr>
 										<th>ClientMail</th>
 										<th>ClientDate</th>
-										<th>수정</th>
-										<th>삭제</th>
+										<th>Edit</th>
+										<th>Delete</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -120,8 +124,8 @@
 												<td><%=c.getClientMail()%></td>
 												<td><%=c.getClientDate().substring(0,11)%></td>
 												<!-- 수정이나 삭제버튼에서 primary key 혹은 unique key인 정보가 해당 폼이나 액션으로 넘어가게 해줘야 함 -->
-												<td><a href="<%=request.getContextPath()%>/client/updateClientForm.jsp?clientMail=<%=c.getClientMail()%>"><button type=button class="btn btn-sm btn btn-primary">수정</button></a></td>
-												<td><a href="<%=request.getContextPath()%>/client/deleteClientAction.jsp?clientMail=<%=c.getClientMail()%>"><button type=button class="btn btn-sm btn btn-primary">삭제</button></a></td>
+												<td><a href="<%=request.getContextPath()%>/client/updateClientForm.jsp?clientMail=<%=c.getClientMail()%>"><button type=button class="btn btn-sm btn btn-primary">Edit</button></a></td>
+												<td><a href="<%=request.getContextPath()%>/client/deleteClientAction.jsp?clientMail=<%=c.getClientMail()%>"><button type=button class="btn btn-sm btn btn-primary">Delete</button></a></td>
 											</tr>
 									<%
 										}
@@ -194,7 +198,7 @@
 			<input type="hidden" name="rowPerPage" value="<%=rowPerPage%>">
 			<div class="col-md-6">
 				<input type="text" name="searchWord" placeholder="Search...">
-				<button type="submit" class="btn btn-sm btn btn-primary">검색</button>
+				<button type="submit" class="btn btn-sm btn btn-primary">Search</button>
 			</div>
 		</form>
 	

@@ -2,10 +2,10 @@
 <%@ page import="gdu.mall.vo.*"%>
 <%@ page import="gdu.mall.dao.*"%>
 <%
-	// 매니저인 사람들만 고객리스트에 접근할 수 있게 함
 	// 매니저가 아니라면 다시 adminIndex로 보내버림
+	// 레벨 2 이상만 삭제 가능
 	Manager manager = (Manager)session.getAttribute("sessionManager");
-	if(manager == null || manager.getManagerLevel() < 1) {
+	if(manager == null || manager.getManagerLevel() < 2) {
 		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
 		return; // 코드 실행 멈춤
 	}

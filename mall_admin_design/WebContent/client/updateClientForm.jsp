@@ -40,6 +40,12 @@
 <div id="app">
 	<div id="main">
 	
+	<header class="mb-3">
+	    <a href="#" class="burger-btn d-block d-xl-none">
+	        <i class="bi bi-justify fs-3"></i>
+	    </a>
+    </header>
+	
 	<!-- 제목 클릭 시 clientList로 돌아감 -->
 	<h1><a href="<%=request.getContextPath()%>/client/clientList.jsp">ClientList</a></h1>
 	
@@ -71,7 +77,7 @@
 									<div class="col-md-8 form-group">
 										<!-- clientMail 값을 clientAction으로 넘기되, 보이지 않게 처리함 -->
 										<input type="hidden" name="clientMail" value="<%=clientMail%>">
-										<input type="password" class="form-control" id="clientPw">
+										<input type="password" class="form-control" required="required" id="clientPw">
 									</div>
 									<div class="col-sm-12 d-flex justify-content-end">
 										<button type="submit" class="btn btn-primary me-1 mb-1">Submit</button>

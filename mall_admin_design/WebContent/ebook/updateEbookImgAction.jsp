@@ -5,7 +5,6 @@
 <%@ page import="gdu.mall.dao.*" %>
 <%@ page import="gdu.mall.vo.*" %>
 <%
-	// 매니저인 사람들만 고객리스트에 접근할 수 있게 함
 	// 매니저가 아니라면 다시 adminIndex로 보내버림
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if(manager == null || manager.getManagerLevel() < 1) {

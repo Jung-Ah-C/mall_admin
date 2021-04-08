@@ -2,12 +2,12 @@
 <%@ page import="gdu.mall.vo.*"%>
 <%@ page import="gdu.mall.dao.*" %>
 <%	
-	// 관리자만 접근 가능 (level 1)
+	// 관리자만 접근 가능 (level 2 이상만 주문 수정 가능)
 	Manager manager = (Manager)session.getAttribute("sessionManager");
 	if (manager == null) {
 		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
 		return;	
-	} else if(manager.getManagerLevel() < 1) {
+	} else if(manager.getManagerLevel() < 2) {
 		response.sendRedirect(request.getContextPath()+"/adminIndex.jsp");
 		return;
 	}
