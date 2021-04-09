@@ -60,7 +60,7 @@
 		                <!-- 매니저 등록 링크 -->
 		                <p class="text-gray-600">Want to add a new manager? <a href="<%=request.getContextPath()%>/manager/insertManagerForm.jsp" class="font-bold">Sign up</a>.</p>
 		            	<!-- 비밀번호 찾기 링크 -->
-		            	<p><a class="font-bold" href="auth-forgot-password.html">Forgot your password?</a></p>
+		            	<p><a class="font-bold" href="<%=request.getContextPath()%>/adminPassword.jsp">Forgot your password?</a></p>
 		            </div>
 	            </form>
 	            <br>
