@@ -30,7 +30,7 @@
 	            <form action="<%=request.getContextPath()%>/manager/loginManagerAction.jsp" method="post">
 	                <!-- 아이디 입력창 -->
 	                <div class="form-group position-relative has-icon-left mb-4">
-	                    <input type="text" name="managerId" class="form-control form-control-xl" placeholder="ManagerID">
+	                    <input type="text" name="managerId" value="admin" class="form-control form-control-xl" placeholder="ManagerID">
 	                    <div class="form-control-icon">
 	                        <i class="bi bi-person"></i>
 	                    </div>
@@ -38,7 +38,7 @@
 	                
 	                <!-- 패스워드 입력창 -->
 	                <div class="form-group position-relative has-icon-left mb-4">
-	                    <input type="password" name="managerPw" class="form-control form-control-xl" placeholder="Password">
+	                    <input type="password" name="managerPw" value="1234" class="form-control form-control-xl" placeholder="Password">
 	                    <div class="form-control-icon">
 	                        <i class="bi bi-shield-lock"></i>
 	                    </div>
